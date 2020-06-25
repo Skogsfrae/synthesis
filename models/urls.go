@@ -37,3 +37,13 @@ func FindUrl(shortnedUrl string) (*Url, error) {
 		Select()
 	return url, err
 }
+
+func DeleteUrl(shortenedUrl string) (bool, error) {
+	url := new(Url)
+	res, err := db.Model(url).Where("short_url = ?", shortenedUrl).Delete()
+	if res.RowsAffected() > 0 {
+		return true, err
+	} else {
+		return false, err
+	}
+}

@@ -38,3 +38,23 @@ func shortenUrl(w http.ResponseWriter, r *http.Request) {
 	url, _ := models.SaveUrl(parsedUrl.String())
 	w.Write([]byte(url.ShortUrl))
 }
+
+func getFullUrl(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	url, err := models.FindUrl(vars["shortUrl"])
+	if err != nil {
+		http.NotFound(w, r)
+	} else {
+		w.Write([]byte(url.FullUrl))
+	}
+}
+
+func deleteUrl(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	_, err := models.DeleteUrl(vars["shortUrl"])
+	if err != nil {
+		http.NotFound(w, r)
+	} else {
+		w.Write([]byte("ok"))
+	}
+}
