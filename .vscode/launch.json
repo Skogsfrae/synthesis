@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "synthesis",
+            "program": "${cwd}/main.go",
             "env": {},
             "args": []
         }
