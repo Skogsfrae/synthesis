@@ -5,21 +5,12 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/gorilla/mux"
 
 	"github.com/skogsfrae/synthesis/models"
 )
-
-func fetchUrl(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	url, err := models.FindUrl(vars["shortUrl"])
-	if err != nil {
-		http.NotFound(w, r)
-	} else {
-		http.Redirect(w, r, url.FullUrl, 301)
-	}
-}
 
 func shortenUrl(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
@@ -46,6 +37,26 @@ func getFullUrl(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	} else {
 		w.Write([]byte(url.FullUrl))
+	}
+}
+
+func getUrlVisitCount(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	url, err := models.FindUrl(vars["shortUrl"])
+	if err != nil {
+		http.NotFound(w, r)
+	} else {
+		w.Write([]byte(strconv.FormatInt(url.VisitCount, 10)))
+	}
+}
+
+func visitUrl(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	url, err := models.VisitUrl(vars["shortUrl"])
+	if err != nil {
+		http.NotFound(w, r)
+	} else {
+		http.Redirect(w, r, url, 301)
 	}
 }
 

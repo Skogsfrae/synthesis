@@ -10,12 +10,13 @@ import (
 
 func InitRoutes() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/{shortUrl}", fetchUrl).Methods("GET")
+	r.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", visitUrl).Methods("GET")
 
 	s := r.PathPrefix("/api/url").Subrouter()
 	s.HandleFunc("", shortenUrl).Methods("POST")
-	s.HandleFunc("/{shortUrl}", getFullUrl).Methods("GET")
-	s.HandleFunc("/{shortUrl}", deleteUrl).Methods("DELETE")
+	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", getFullUrl).Methods("GET")
+	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+}/visit-count", getUrlVisitCount).Methods("GET")
+	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", deleteUrl).Methods("DELETE")
 
 	err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		pathTemplate, err := route.GetPathTemplate()

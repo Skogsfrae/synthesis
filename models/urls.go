@@ -12,12 +12,14 @@ type Url struct {
 	FullUrl        string
 	ShortUrl       string
 	ExpirationTime time.Time
+	VisitCount     int64 `pg:"default:0"`
 }
 
 func SaveUrl(urlString string) (*Url, error) {
 	url := &Url{
 		FullUrl:        urlString,
 		ExpirationTime: time.Now().Add(time.Duration(Config.KeyTimer) * time.Second),
+		VisitCount:     0,
 	}
 
 	_, err := db.Model(url).Insert()
@@ -36,6 +38,18 @@ func FindUrl(shortnedUrl string) (*Url, error) {
 		Where("expiration_time > ?", time.Now()).
 		Select()
 	return url, err
+}
+
+func VisitUrl(shortnedUrl string) (string, error) {
+	url := new(Url)
+	var fullUrl string
+	_, err := db.Model(url).
+		Set("visit_count = visit_count + 1").
+		Where("short_url = ?", shortnedUrl).
+		Where("expiration_time > ?", time.Now()).
+		Returning("full_url").
+		Update(&fullUrl)
+	return fullUrl, err
 }
 
 func DeleteUrl(shortenedUrl string) (bool, error) {
