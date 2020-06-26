@@ -1,0 +1,159 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Synthesis API",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/Skogsfrae/synthesis",
+            "email": "skogsfrae@gmail.com"
+        },
+        "license": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/url/{shortUrl}": {
+            "get": {
+                "tags": [
+                    "Api"
+                ],
+                "summary": "Get full url associated to a short url saved on Synthesis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Short url",
+                        "name": "shortUrl",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "url"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Api"
+                ],
+                "summary": "Save full url and get a short url associated to it on Synthesis",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "url"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Api"
+                ],
+                "summary": "Remove url from Synthesis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Short url",
+                        "name": "shortUrl",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/url/{shortUrl}/visit-count": {
+            "get": {
+                "tags": [
+                    "Api"
+                ],
+                "summary": "Get the number of visits a short url redirected from Synthesis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Short url",
+                        "name": "shortUrl",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "int"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        },
+        "/{shortUrl}": {
+            "get": {
+                "summary": "Visit short url connected website",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Short url",
+                        "name": "shortUrl",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "300": {
+                        "description": "Multiple Choices",
+                        "schema": {
+                            "type": "redirects"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Api"
+        }
+    ]
+}

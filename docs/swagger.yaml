@@ -1,0 +1,102 @@
+info:
+  contact:
+    email: skogsfrae@gmail.com
+    name: API Support
+    url: https://github.com/Skogsfrae/synthesis
+  license: {}
+  title: Synthesis API
+  version: "1.0"
+paths:
+  /{shortUrl}:
+    get:
+      parameters:
+      - description: Short url
+        in: path
+        name: shortUrl
+        required: true
+        type: string
+      responses:
+        "300":
+          description: Multiple Choices
+          schema:
+            type: redirects
+        "404":
+          description: Not Found
+          schema:
+            type: url
+      summary: Visit short url connected website
+  /api/url/{shortUrl}:
+    delete:
+      parameters:
+      - description: Short url
+        in: path
+        name: shortUrl
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: url
+      summary: Remove url from Synthesis
+      tags:
+      - Api
+    get:
+      parameters:
+      - description: Short url
+        in: path
+        name: shortUrl
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: url
+      summary: Get full url associated to a short url saved on Synthesis
+      tags:
+      - Api
+    put:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: url
+      summary: Save full url and get a short url associated to it on Synthesis
+      tags:
+      - Api
+  /api/url/{shortUrl}/visit-count:
+    get:
+      parameters:
+      - description: Short url
+        in: path
+        name: shortUrl
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: int
+        "404":
+          description: Not Found
+          schema:
+            type: url
+      summary: Get the number of visits a short url redirected from Synthesis
+      tags:
+      - Api
+swagger: "2.0"
+tags:
+- name: Api

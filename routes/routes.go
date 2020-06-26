@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	_ "github.com/skogsfrae/synthesis/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func InitRoutes() *mux.Router {
@@ -13,10 +15,15 @@ func InitRoutes() *mux.Router {
 	r.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", visitUrl).Methods("GET")
 
 	s := r.PathPrefix("/api/url").Subrouter()
-	s.HandleFunc("", shortenUrl).Methods("POST")
+	s.HandleFunc("", shortenUrl).Methods("PUT")
 	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", getFullUrl).Methods("GET")
 	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+}/visit-count", getUrlVisitCount).Methods("GET")
 	s.HandleFunc("/{shortUrl:[a-z,A-Z,0-9]+$}", deleteUrl).Methods("DELETE")
+
+	swag := r.PathPrefix("/swagger").Subrouter()
+	swag.HandleFunc("/{path}", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:3000/swagger/doc.json"),
+	))
 
 	err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		pathTemplate, err := route.GetPathTemplate()
